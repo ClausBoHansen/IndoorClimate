@@ -1,0 +1,37 @@
+---
+title: "IndoorClimate"
+author: "Claus Bo Hansen"
+date: "October 11, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load libraries
+library(tidyverse)
+
+```
+
+
+```{r}
+
+# Load data
+indoor <- read.csv("Stuen_11_10_2019.csv", skip = 2, sep = ";", stringsAsFactors = FALSE) %>%
+  rename(IndoorTemp = Temperature, Time = Timezone...Europe.Copenhagen) %>%
+  mutate(Time = as.POSIXct(Time)) %>%
+  select(Time, IndoorTemp, Humidity, CO2)
+  
+outdoor <- read.csv("Skuret_11_10_2019.csv", skip = 2, sep = ";")
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
