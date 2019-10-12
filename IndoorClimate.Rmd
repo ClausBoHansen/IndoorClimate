@@ -14,7 +14,7 @@ library(plotly)
 
 ```
 
-The purpose of this page is to demonstrate plot_ly by showing an example of the relationship between indoor and outdoor humidity and the temperature difference between indoor and outdoor.
+The purpose of this page is to demonstrate plot_ly by showing an example of the relationship between indoor and outdoor humidity and the temperature difference between indoor and outdoor for all Mondays during the last year.
 Not surprisingly, the relative humidity drops in a heated house, when the outside temperature drops.
 
 
@@ -39,7 +39,8 @@ outdoor <- read.csv("Skuret_11_10_2019.csv", skip = 2, sep = ";") %>%
 
 climatedata <- indoor %>%
   left_join(outdoor, by = "Time") %>%
-  mutate(Temperaturedifference = IndoorTemp - OutdoorTemp)
+  mutate(Temperaturedifference = IndoorTemp - OutdoorTemp) %>%
+  filter(strftime(Time, '%A') == "Monday")
 
 ```
 
@@ -50,8 +51,6 @@ climatedata <- indoor %>%
 plot_ly(climatedata, x = ~Temperaturedifference, y = ~OutdoorHumidity, z = ~IndoorHumidity) %>%
   add_markers(size = 1) %>%
   layout(dragmode = "orbit")
-
-#= “orbit”)
 
 ```
 
