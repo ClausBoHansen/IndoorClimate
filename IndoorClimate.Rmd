@@ -10,28 +10,48 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Load libraries
 library(tidyverse)
+library(plotly)
 
 ```
+
+The purpose of this page is to demonstrate plot_ly by showing an example of the relationship between indoor and outdoor humidity and the temperature difference between indoor and outdoor.
+Not surprisingly, the relative humidity drops in a heated house, when the outside temperature drops.
 
 
 ```{r}
 
 # Load data
 indoor <- read.csv("Stuen_11_10_2019.csv", skip = 2, sep = ";", stringsAsFactors = FALSE) %>%
-  rename(IndoorTemp = Temperature, Time = Timezone...Europe.Copenhagen) %>%
+  rename(IndoorTemp = Temperature,
+         IndoorCO2 = CO2,
+         IndoorHumidity = Humidity,
+         Time = Timezone...Europe.Copenhagen) %>%
   mutate(Time = as.POSIXct(Time)) %>%
-  select(Time, IndoorTemp, Humidity, CO2)
+  select(Time, IndoorTemp, IndoorHumidity, IndoorCO2)
   
-outdoor <- read.csv("Skuret_11_10_2019.csv", skip = 2, sep = ";")
+outdoor <- read.csv("Skuret_11_10_2019.csv", skip = 2, sep = ";") %>%
+  rename(OutdoorTemp = Temperature,
+         OutdoorHumidity = Humidity,
+         Time = Timezone...Europe.Copenhagen) %>%
+  mutate(Time = as.POSIXct(Time)) %>%
+  select(Time, OutdoorTemp, OutdoorHumidity)
+
+
+climatedata <- indoor %>%
+  left_join(outdoor, by = "Time") %>%
+  mutate(Temperaturedifference = IndoorTemp - OutdoorTemp)
 
 ```
 
-## Including Plots
+# 3D visualization
 
-You can also embed plots, for example:
+```{r}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+plot_ly(climatedata, x = ~Temperaturedifference, y = ~OutdoorHumidity, z = ~IndoorHumidity) %>%
+  add_markers(size = 1) %>%
+  layout(dragmode = "orbit")
+
+#= “orbit”)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
