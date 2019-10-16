@@ -2,11 +2,14 @@
 title: "IndoorClimate"
 author: "Claus Bo Hansen"
 date: "October 11, 2019"
-output: html_document
+output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+
+#output: html_document
+
 
 # Load libraries
 library(tidyverse)
@@ -14,6 +17,7 @@ library(plotly)
 
 ```
 
+## Background
 The purpose of this page is to demonstrate plot_ly by showing an example of the relationship between indoor humidity and CO2 concentration and the temperature difference between indoor and outdoor for all Mondays during the last year.
 Not surprisingly, the relative humidity drops in a heated house, when the outside temperature drops.
 
@@ -44,7 +48,7 @@ climatedata <- indoor %>%
 
 ```
 
-# 3D visualization
+## 3D visualization
 
 ```{r}
 
